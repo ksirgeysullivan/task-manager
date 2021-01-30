@@ -1,0 +1,6 @@
+C:\Users\kathe\OneDrive\Documents\task-manager\Task Manager\Task Manager.Objects\bin\Debug\Task Manager.Objects.dll
+C:\Users\kathe\OneDrive\Documents\task-manager\Task Manager\Task Manager.Objects\bin\Debug\Task Manager.Objects.pdb
+C:\Users\kathe\OneDrive\Documents\task-manager\Task Manager\Task Manager.Objects\obj\Debug\Task Manager.Objects.csprojAssemblyReference.cache
+C:\Users\kathe\OneDrive\Documents\task-manager\Task Manager\Task Manager.Objects\obj\Debug\Task Manager.Objects.csproj.CoreCompileInputs.cache
+C:\Users\kathe\OneDrive\Documents\task-manager\Task Manager\Task Manager.Objects\obj\Debug\Task Manager.Objects.dll
+C:\Users\kathe\OneDrive\Documents\task-manager\Task Manager\Task Manager.Objects\obj\Debug\Task Manager.Objects.pdb
