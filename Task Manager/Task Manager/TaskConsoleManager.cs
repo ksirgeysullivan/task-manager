@@ -14,9 +14,9 @@ namespace Task_Manager
         public TaskConsoleManager()
         {
             taskCollection = new TaskCollection();
-            taskCollection.Add("bathe Mark", "chore");
-            taskCollection.Add("feed Mark", "chore");
-            taskCollection.Add("shower with Kat", "pleasure");
+            taskCollection.Add("bathe Mark", "chore", "Kat");
+            taskCollection.Add("feed Mark", "chore", "Kat");
+            taskCollection.Add("shower with Kat", "pleasure", "Mark");
         }
         
         public void ShowMenu()
@@ -31,7 +31,8 @@ namespace Task_Manager
                 Console.WriteLine("1. Add a task");
                 Console.WriteLine("2. Delete a task");
                 Console.WriteLine("3. View the tasks");
-                Console.WriteLine("4. Exit the app");
+                Console.WriteLine("4. Search for a task");
+                Console.WriteLine("5. Exit the app");
                 menuOption = Console.ReadKey().KeyChar;
 
                 Console.WriteLine("\n\n");
@@ -48,10 +49,14 @@ namespace Task_Manager
                     case '3':
                         ViewTasksUI();
                         break;
+
+                    case '4':
+                        SearchTasksUI();
+                        break;
                 }
 
 
-            } while (menuOption != '4');
+            } while (menuOption != '5');
         }
 
         private void ViewTasksUI()
@@ -69,22 +74,31 @@ namespace Task_Manager
 
             Console.Write("Select the task you wish to delete: ");
             string task = Console.ReadLine();
-            int taskInt;
-            if( !Int32.TryParse(task, out taskInt))
+
+            if (ValidateTaskIndexEntry(task, out int taskInt))
+            {
+                taskCollection.DeleteTask(taskInt - 1);
+
+                Console.WriteLine("Task deleted successfully");
+            }
+        }
+
+
+        private bool ValidateTaskIndexEntry(string taskIndexString, out int indexValue)
+        {
+            if (!Int32.TryParse(taskIndexString, out indexValue))
             {
                 Console.WriteLine("ERROR: You must enter a number");
-                return;
+                return false;
             }
 
-            if(taskInt < 1 || taskInt > taskCollection.Count)
+            if (indexValue < 1 || indexValue > taskCollection.Count)
             {
                 Console.WriteLine("ERROR: You must enter a valid task number");
-                return;
+                return false;
             }
 
-            taskCollection.DeleteTask(taskInt-1);
-
-            Console.WriteLine("Task deleted successfully");
+            return true;
         }
 
         private void AddTaskUI()
@@ -94,16 +108,53 @@ namespace Task_Manager
             string taskName = Console.ReadLine();
             Console.Write("    Task Category: ");
             string category = Console.ReadLine();
+            Console.Write("    Task Person: ");
+            string person = Console.ReadLine();
 
-            if((String.IsNullOrWhiteSpace(taskName)) || (String.IsNullOrWhiteSpace(category)))
+            if((String.IsNullOrWhiteSpace(taskName)) || (String.IsNullOrWhiteSpace(category)) || (String.IsNullOrWhiteSpace(person)))
             {
-                Console.WriteLine("ERROR: Both name and category are required");
+                Console.WriteLine("ERROR: Name, category, and person are required");
                 return;
             }
 
-            taskCollection.Add(taskName, category);
+            SingleTask newTask = taskCollection.Add(taskName, category, person);
+
+            
+            Console.Write("    Due Date (Optional): ");
+            string dateString = Console.ReadLine();
+            
+
+            if(!String.IsNullOrWhiteSpace(dateString))
+            {
+                DateTime dueDate = new DateTime();
+                if (DateTime.TryParse(dateString, out dueDate))
+                {
+                    newTask.DueDate = dueDate;
+                }
+                else
+                {
+                    Console.WriteLine("Unable to parse your date.");
+                }
+            }
+
+            
+
 
             Console.WriteLine("Task added successfully");           
+        }
+
+        private void SearchTasksUI()
+        {
+            Console.Write("Type your search item here: ");
+            string searchItem = Console.ReadLine();
+
+            if(String.IsNullOrWhiteSpace(searchItem))
+            {
+                Console.WriteLine("Please enter a word or phrase.");
+            } else
+            {
+                Console.WriteLine(taskCollection.SearchTasks(searchItem));
+            }
         }
     }
 }

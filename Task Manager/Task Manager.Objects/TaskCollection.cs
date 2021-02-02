@@ -26,13 +26,16 @@ namespace Task_Manager.Objects
             //Call database method
         }
 
-        public void Add(string name, string category)
+        public SingleTask Add(string name, string category, string person)
         {
             SingleTask newTask = new SingleTask();
             newTask.Name = name;
             newTask.Category = category;
+            newTask.Person = person;
 
             Add(newTask);
+
+            return newTask;
         }
 
         public string DisplayString(bool showIndex)
@@ -41,13 +44,14 @@ namespace Task_Manager.Objects
 
             int counter = 1;
 
-            foreach(SingleTask task in tasks)
+            foreach (SingleTask task in tasks)
             {
-                if(showIndex == true)
+                if (showIndex == true)
                 {
                     returnValue += counter + ": ";
                 }
-                returnValue += $"{task.Name} ({task.Category})\n";
+                returnValue += task.ToString();
+
                 counter++;
             }
 
@@ -59,6 +63,23 @@ namespace Task_Manager.Objects
         {
             tasks.RemoveAt(task);
             return true;
+        }
+
+        public string SearchTasks(string searchItem)
+        {
+            string returnValue = String.Empty;
+            int matchCounter = 0;
+
+            foreach (SingleTask task in tasks)
+            {
+                if(task.Name.IndexOf(searchItem,StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    matchCounter++;
+                    returnValue += task.ToString();
+                }
+            }
+            
+            return $"There were {matchCounter} matches\n" + returnValue;
         }
     }
 }
